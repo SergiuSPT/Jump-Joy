@@ -79,6 +79,9 @@ span {
   padding-top: 20px;
 }
 
+.input-group input{
+  width: 50%;
+}
 button {
     width:25%;
 }
