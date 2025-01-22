@@ -19,9 +19,25 @@ app.use(bodyParser.urlencoded({extended : true}));
 
 
 //Render main page
-
 app.get("/", (req, res)=>{
     res.render("index.ejs");
+});
+
+app.post("/submit", async (req, res)=>{
+    const fname= req.body["fname"];
+    const lname= req.body["lname"];
+    const email= req.body["email"];
+    console.log("email Submitted");
+    try {
+        await db.query(
+          "INSERT INTO client (fname,lname,email) VALUES ($1,$2,$3)",
+          [fname, lname, email]
+        );
+        res.redirect("/");
+      } catch (err) {
+        console.log(err);
+        res.render("index.ejs");
+      }
 });
 
 
