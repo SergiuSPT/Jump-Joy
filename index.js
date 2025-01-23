@@ -33,7 +33,7 @@ app.post("/submit", async (req, res)=>{
           "INSERT INTO client (fname,lname,email) VALUES ($1,$2,$3)",
           [fname, lname, email]
         );
-        res.redirect("/");
+        res.render("validation.ejs", {name: fname});
       } catch (err) {
         console.log(err);
         res.render("index.ejs");
