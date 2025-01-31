@@ -3,6 +3,7 @@ import bodyParser from "body-parser"
 import axios from "axios";
 import pg from "pg";
 import env from "dotenv";
+import nodemailer from "nodemailer";
 
 env.config();
 const db = new pg.Client({
@@ -20,6 +21,13 @@ const port = 4000;
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended : true}));
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "sergiuspatar19@gmail.com",
+    pass: "tkbt wvhp hvbb rfes",
+  },
+});
 
 //Render main page
 app.get("/", (req, res)=>{
@@ -30,7 +38,7 @@ app.post("/submit", async (req, res)=>{
     const fname= req.body["fname"];
     const lname= req.body["lname"];
     const email= req.body["email"];
-    const message = "This is a where the course will be displayed";
+    const message = "This is a where the course will be displayed. Untill the here is this message just to test the functionality.";
     console.log("email Submitted");
     try {
         await db.query(
@@ -38,14 +46,16 @@ app.post("/submit", async (req, res)=>{
           [fname, lname, email]
         );
         try{
-            await axios.post("https://dashboard.emailjs.com/admin/account?service_id=service_pvuj9te&template_id=my_template&user_id=vuAIrw63ShERTOrnd&accessToken=s8XpmtgYbu1vLdOdbxYD_",{
-                to_email: email,
-                to_name: fname,
-                message: message,
-            });
-          }catch(err){
-            console.log(err);
-          }
+          const info = await transporter.sendMail({
+            from: '"Jump&Joy 🪢" <jump&joy@mail.com>', // sender address
+            to: email, // list of receivers
+            subject: "Hello " + fname, // Subject line
+            text: "Making progress with the app, short message to your email", // plain text body
+          });
+          console.log("Message sent: %s", info.messageId);
+        }catch(err){
+          console.log(err);
+        }
         res.render("validation.ejs", {name: fname});
       } catch (err) {
         console.log(err);
