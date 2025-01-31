@@ -111,7 +111,7 @@ span {
   background-color: grey;
 }
 .form-box {
-  width: 50%;
+  text-align: center;
 }
 
 .roboto-thin {
@@ -184,5 +184,12 @@ span {
     font-family: "Roboto", sans-serif;
     font-weight: 900;
     font-style: italic;
+  }
+
+  @media only screen and (min-width: 992px){
+    .form-box {
+      width: 50%;
+      text-align: center;
+    }
   }
   
