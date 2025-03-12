@@ -7,11 +7,14 @@ import nodemailer from "nodemailer";
 
 env.config();
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "PaulJumps",
+  user: "pauljumps_user",
+  host: process.env.DB_HOST,
+  database: "pauljumps",
   password: process.env.DB_PASSWORD,
-  port: 5432,
+  port: process.env.DB_PORT,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 db.connect();
 const app = express();
@@ -43,8 +46,8 @@ app.post("/submit", async (req, res) => {
 \nHere’s your access link to the course: ${course_link}\n\nEnjoy the course, and feel free to reach out if you need any help!\n\nBest,\nPaul\n\nP.S. If you have any questions or need help, feel free to reply to this email. I’m here to help you!`;
   try {
     await db.query(
-      "INSERT INTO client (fname,lname,email) VALUES ($1,$2,$3)",
-      [fname, lname, email]
+      "INSERT INTO clients (lname,fname,email) VALUES ($1,$2,$3)",
+      [[lname], [fname], [email]]
     );
     try {
       const info = await transporter.sendMail({
