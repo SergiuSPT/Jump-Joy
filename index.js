@@ -7,9 +7,9 @@ import nodemailer from "nodemailer";
 
 env.config();
 const db = new pg.Client({
-  user: "pauljumps_user",
+  user: "pauljumps_a8mo_user",
   host: process.env.DB_HOST,
-  database: "pauljumps",
+  database: "pauljumps_a8mo",
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
   ssl: {
